@@ -7,21 +7,20 @@
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="app.js"></script>
 
     <style>
-        /* --- NUEVA PALETA DE COLORES (Basada en tu logo) --- */
         :root {
-            --color-crema-fondo: #fdfdf2;   /* Fondo claro del logo */
-            --color-verde-logo: #1b6e49;    /* Verde oscuro de los íconos */
-            --color-marron-texto: #3c2918;  /* Marrón oscuro de la palabra TechWood */
+            --color-crema-fondo: #fdfdf2;
+            --color-verde-logo: #1b6e49;
+            --color-marron-texto: #3c2918;
             --color-blanco-puro: #ffffff;
-            --color-cyan-ar: #00eaf1;       /* Celeste del cubo RA */
+            --color-cyan-ar: #00eaf1;
             --color-rojo-alerta: #ef4444;   
         }
 
         body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--color-marron-texto); background-color: var(--color-crema-fondo); }
 
-        /* --- HEADER --- */
         #header {
             position: absolute; top: 0; left: 0; width: 100%; height: 60px;
             background-color: var(--color-marron-texto); z-index: 999;
@@ -29,7 +28,7 @@
             border-bottom: 3px solid var(--color-verde-logo); color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-        #logo-header { height: 35px; margin-right: 15px; border-radius: 6px; } /* Border radius por si es JPEG */
+        #logo-header { height: 35px; margin-right: 15px; border-radius: 6px; }
         #app-title { font-size: 20px; font-weight: bold; color: var(--color-crema-fondo); }
         
         #btn-hamburger {
@@ -37,58 +36,38 @@
             margin-right: 20px; pointer-events: auto; background: none; border: none; padding: 0;
         }
 
-        /* --- MENÚ LATERAL DESPLEGABLE --- */
         #menu-lateral {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
             background-color: var(--color-crema-fondo); z-index: 10000;
-            transition: left 0.4s ease;
-            box-shadow: 10px 0 15px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column;
-            border-right: 3px solid var(--color-verde-logo);
-            pointer-events: auto;
+            transition: left 0.4s ease; box-shadow: 10px 0 15px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; border-right: 3px solid var(--color-verde-logo); pointer-events: auto;
         }
         #menu-lateral.abierto { left: 0; }
 
-        #menu-header {
-            padding: 30px 20px; border-bottom: 1px solid #e2e8f0;
-            text-align: center; color: var(--color-marron-texto);
-        }
+        #menu-header { padding: 30px 20px; border-bottom: 1px solid #e2e8f0; text-align: center; color: var(--color-marron-texto); }
         #logo-menu { height: 70px; margin-bottom: 15px; border-radius: 10px; }
         #menu-title { font-size: 15px; color: var(--color-verde-logo); margin: 0; font-weight: bold;}
 
         #menu-acciones { flex-grow: 1; padding: 20px 0; }
-        
         .opcion-menu {
-            display: flex; align-items: center;
-            padding: 15px 25px; color: var(--color-marron-texto); text-decoration: none;
-            font-size: 16px; border-left: 4px solid transparent;
-            cursor: pointer; transition: background 0.3s; font-weight: 500;
+            display: flex; align-items: center; padding: 15px 25px; color: var(--color-marron-texto); text-decoration: none;
+            font-size: 16px; border-left: 4px solid transparent; cursor: pointer; transition: background 0.3s; font-weight: 500;
         }
         .opcion-menu:hover { background-color: rgba(27, 110, 73, 0.08); }
-        .opcion-menu.activa {
-            background-color: rgba(27, 110, 73, 0.15);
-            border-left-color: var(--color-verde-logo); color: var(--color-verde-logo); font-weight: bold;
-        }
+        .opcion-menu.activa { background-color: rgba(27, 110, 73, 0.15); border-left-color: var(--color-verde-logo); color: var(--color-verde-logo); font-weight: bold; }
         .opcion-menu i { margin-right: 15px; font-size: 18px; width: 20px; text-align: center; }
 
-        #overlay-menu {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.7); z-index: 9999; pointer-events: auto;
-        }
+        #overlay-menu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 9999; pointer-events: auto; }
         #overlay-menu.abierto { display: block; }
 
-        /* --- PANTALLA DE INICIO (Ahora en Crema) --- */
         #pantalla-inicio {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--color-crema-fondo); z-index: 9999;
-            display: flex; justify-content: center; align-items: center;
-            transition: opacity 0.5s ease;
+            display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease;
         }
         .card-configuracion {
-            background-color: var(--color-blanco-puro); padding: 30px; border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(60, 41, 24, 0.15); text-align: center;
-            color: var(--color-marron-texto); width: 85%; max-width: 400px;
-            border-top: 5px solid var(--color-verde-logo);
+            background-color: var(--color-blanco-puro); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(60, 41, 24, 0.15); text-align: center;
+            color: var(--color-marron-texto); width: 85%; max-width: 400px; border-top: 5px solid var(--color-verde-logo);
         }
         .card-configuracion h1 { margin: 10px 0 5px 0; font-size: 24px; color: var(--color-verde-logo); }
         .card-configuracion p { margin: 0 0 25px 0; font-size: 14px; color: #64748b; }
@@ -96,58 +75,35 @@
 
         .grupo-input { text-align: left; margin-bottom: 25px; }
         .grupo-input label { font-size: 13px; color: var(--color-marron-texto); font-weight: bold; display: block; margin-bottom: 8px; }
-        select {
-            width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e1;
-            background-color: var(--color-crema-fondo); color: var(--color-marron-texto); font-size: 16px; outline: none;
-        }
+        select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e1; background-color: var(--color-crema-fondo); color: var(--color-marron-texto); font-size: 16px; outline: none; }
 
-        /* --- BOTONES --- */
         .btn-primario {
-            width: 100%; padding: 14px; border-radius: 6px; border: none;
-            background-color: var(--color-verde-logo); color: var(--color-blanco-puro);
-            font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s;
-            margin-bottom: 10px; pointer-events: auto;
+            width: 100%; padding: 14px; border-radius: 6px; border: none; background-color: var(--color-verde-logo); color: var(--color-blanco-puro);
+            font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-bottom: 10px; pointer-events: auto;
         }
         .btn-primario:hover { background-color: #124d33; }
 
-        /* --- INTERFAZ AR (Sobre la cámara) --- */
-        #interfaz-ar {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 1000; pointer-events: none; display: none;
-        }
+        #interfaz-ar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; pointer-events: none; display: none; }
         .btn-qr { bottom: 30px; right: 20px; position: absolute; pointer-events: auto; width: auto; font-size: 14px; padding: 12px 20px; background-color: var(--color-cyan-ar); color: var(--color-marron-texto); font-weight: bold; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border-radius: 6px;}
 
-        /* --- HUD 2D FIJO --- */
+        /* --- HUD 2D ACTUALIZADO --- */
         #hud-2d {
             position: absolute; bottom: 85px; left: 20px;
-            background-color: rgba(60, 41, 24, 0.9); /* Marrón oscuro transparente */
-            border-top: 4px solid var(--color-verde-logo); 
+            background-color: rgba(60, 41, 24, 0.9);
+            border-top: 4px solid #94a3b8; /* Gris por defecto hasta que escanee */
             padding: 15px; border-radius: 8px; width: 230px;
             color: var(--color-crema-fondo); pointer-events: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: border-color 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: border-color 0.3s;
         }
-        #hud-2d h4 { margin: 0 0 10px 0; color: var(--color-cyan-ar); font-size: 12px; text-align: center; }
+        #hud-titulo { margin: 0 0 10px 0; color: #cbd5e1; font-size: 13px; text-align: center; transition: color 0.3s;}
+        
         .hud-linea { margin: 5px 0; font-size: 13px; }
         #hud-calidad { display: block; text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px; }
 
-        /* --- VENTANAS MODALES --- */
-        .modal {
-            display: none; position: fixed; z-index: 10000; left: 0; top: 0;
-            width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8);
-            justify-content: center; align-items: center; pointer-events: auto;
-        }
-        .modal-contenido {
-            background-color: var(--color-crema-fondo); padding: 25px; border-radius: 10px; width: 85%; max-width: 500px;
-            color: var(--color-marron-texto); border-top: 5px solid var(--color-verde-logo);
-            position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-        .btn-cerrar {
-            position: absolute; top: 15px; right: 20px; color: var(--color-rojo-alerta); font-size: 28px;
-            cursor: pointer; background: none; border: none; pointer-events: auto; font-weight: bold;
-        }
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; pointer-events: auto; }
+        .modal-contenido { background-color: var(--color-crema-fondo); padding: 25px; border-radius: 10px; width: 85%; max-width: 500px; color: var(--color-marron-texto); border-top: 5px solid var(--color-verde-logo); position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .btn-cerrar { position: absolute; top: 15px; right: 20px; color: var(--color-rojo-alerta); font-size: 28px; cursor: pointer; background: none; border: none; pointer-events: auto; font-weight: bold; }
 
-        /* --- ESTILOS REPORTE --- */
         #reporte-contenedor h2 { color: var(--color-verde-logo); text-align: center; margin-bottom: 25px; }
         #reporte-contenedor table { width: 100%; border-collapse: collapse; font-size: 13px; }
         #reporte-contenedor th, td { border-bottom: 1px solid #cbd5e1; padding: 10px; text-align: left; }
@@ -157,12 +113,10 @@
         .barra { width: 30px; background-color: var(--color-verde-logo); border-radius: 4px 4px 0 0; text-align: center; color: white; font-weight: bold; font-size: 11px; padding-top: 5px; }
         .etiqueta-barra { color: var(--color-marron-texto); font-size: 11px; margin-top: 5px; text-align: center; width: 40px; font-weight: bold;}
 
-        /* HISTORIAL */
         #tabla-historial { width: 100%; border-collapse: collapse; font-size: 14px; }
         #tabla-historial th { color: var(--color-verde-logo); text-align: left; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px;}
         #tabla-historial td { padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
 
-        /* QR */
         .qr-container { text-align: center; }
         .qr-container img { border: 10px solid white; border-radius: 8px; max-width: 200px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
     </style>
@@ -202,7 +156,6 @@
         </div>
         <div id="menu-acciones">
             <a class="opcion-menu" id="opt-nueva-muestra" style="color: var(--color-verde-logo); font-weight: bold;"><i class="fas fa-plus-circle"></i> Escanear Nueva Madera</a>
-            
             <a class="opcion-menu activa" id="opt-analisis"><i class="fas fa-camera"></i> Análisis Actual</a>
             <a class="opcion-menu" id="opt-reporte"><i class="fas fa-file-contract"></i> Generar Reporte</a>
             <a class="opcion-menu" id="opt-historial"><i class="fas fa-history"></i> Historial de Lotes</a>
@@ -235,20 +188,17 @@
                     <span style="font-size: 10px; color: #64748b; text-align: right;"><b>REPORTE DIGITAL</b><br>Lote Activo</span>
                 </div>
                 <h2>Análisis Estadístico de Lote</h2>
-                
                 <table>
                     <tr><td>Total Analizado</td><td>35 muestras</td></tr>
                     <tr><td>Promedio Humedad</td><td>18.5 %</td></tr>
                     <tr><td>Muestras Premium</td><td style="color: var(--color-verde-logo); font-weight: bold;">65 % (23 unidades)</td></tr>
                     <tr><td>Muestras Bajas</td><td style="color: var(--color-rojo-alerta); font-weight: bold;">10 % (4 unidades)</td></tr>
                 </table>
-
                 <div class="grafico-simulado">
                     <div><div class="barra" style="height: 120px; background-color: var(--color-verde-logo);">23</div><div class="etiqueta-barra">Prem</div></div>
                     <div><div class="barra" style="height: 60px; background-color: #d97706;">8</div><div class="etiqueta-barra">Med</div></div>
                     <div><div class="barra" style="height: 30px; background-color: var(--color-rojo-alerta);">4</div><div class="etiqueta-barra">Baja</div></div>
                 </div>
-                
                 <button class="btn-primario" style="margin-top: 30px;">IMPRIMIR PDF COMPLETO</button>
             </div>
         </div>
@@ -268,19 +218,27 @@
     </div>
 
     <div id="interfaz-ar">
-        <button id="btn-generar-qr" class="btn-flotante btn-qr">Generar Código QR</button>
+        <button id="btn-generar-qr" class="btn-flotante btn-qr" style="display: none;">Generar Código QR</button>
         
         <div id="hud-2d">
-            <h4>LIGNOQUALITY RA - ANALISIS</h4>
-            <p class="hud-linea" id="hud-especie">Especie: ...</p>
-            <p class="hud-linea" id="hud-humedad">Humedad: ...</p>
-            <p class="hud-linea" id="hud-defectos">Defectos: ...</p>
-            <span id="hud-calidad">CALIDAD: ...</span>
+            <h4 id="hud-titulo">ESPERANDO MUESTRA...</h4>
+            
+            <div id="hud-escaneando" style="display: none; text-align: center; margin: 15px 0;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 28px; color: var(--color-cyan-ar);"></i>
+                <p style="font-size: 12px; margin-top: 10px; color: #cbd5e1;">Analizando estructura...</p>
+            </div>
+
+            <div id="hud-datos" style="display: none;">
+                <p class="hud-linea" id="hud-especie">Especie: ...</p>
+                <p class="hud-linea" id="hud-humedad">Humedad: ...</p>
+                <p class="hud-linea" id="hud-defectos">Defectos: ...</p>
+                <span id="hud-calidad">CALIDAD: ...</span>
+            </div>
         </div>
     </div>
 
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
-        <a-marker preset="hiro">
+        <a-marker preset="hiro" controlador-marcador>
             <a-entity id="zona-defecto" visible="false" position="0 0 0">
                 <a-ring id="anillo-defecto" color="red" radius-inner="0.3" radius-outer="0.4" rotation="-90 0 0" opacity="0.8"
                     animation="property: scale; dir: alternate; dur: 1000; to: 1.2 1.2 1.2; loop: true"></a-ring>
@@ -290,7 +248,5 @@
         <a-entity camera></a-entity>
     </a-scene>
 
-    <script src="app.js"></script>
 </body>
-
 </html>
