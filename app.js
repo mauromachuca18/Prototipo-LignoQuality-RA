@@ -1,70 +1,55 @@
 // --- COMPONENTE A-FRAME PARA DETECTAR EL MARCADOR ---
 AFRAME.registerComponent('controlador-marcador', {
     init: function () {
-        // Cuando la cámara enfoca el marcador Hiro
-        this.el.addEventListener('markerFound', () => {
-            iniciarEscaneoSimulado();
-        });
-        
-        // Cuando la cámara pierde el marcador Hiro
-        this.el.addEventListener('markerLost', () => {
-            pausarEscaneoSimulado();
-        });
+        this.el.addEventListener('markerFound', () => { iniciarEscaneoSimulado(); });
+        this.el.addEventListener('markerLost', () => { pausarEscaneoSimulado(); });
     }
 });
 
 // --- VARIABLES GLOBALES ---
 let historialEscaneos = []; 
 let datosActuales = null;   
-let temporizadorEscaneo;      // Controla los 2.5 segundos
-let escaneoCompletado = false; // Evita escanear dos veces la misma madera
+let temporizadorEscaneo;      
+let escaneoCompletado = false; 
 
-// --- 1. PREPARAR DATOS (Al tocar "Iniciar Escaneo" en el menú) ---
+// --- 1. PREPARAR DATOS ---
 async function prepararEscaneo(tipoSeleccionado) {
     try {
         const respuesta = await fetch('./datos.json');
         const baseDeDatos = await respuesta.json();
         datosActuales = baseDeDatos[tipoSeleccionado];
-        
-        // Reseteamos la interfaz (por si estaba viendo otra madera antes)
         reiniciarInterfazHUD();
     } catch (error) {
         console.error("Error al cargar datos:", error);
     }
 }
 
-// --- 2. LÓGICA DE SIMULACIÓN DE ESCANEO (Tiempo Real) ---
+// --- 2. LÓGICA DE SIMULACIÓN DE ESCANEO ---
 function iniciarEscaneoSimulado() {
-    // Si ya terminó de escanear o no hay datos cargados, no hace nada
     if (escaneoCompletado || !datosActuales) return;
 
     const hudTitulo = document.getElementById('hud-titulo');
     const hudEscaneando = document.getElementById('hud-escaneando');
     const hud2d = document.getElementById('hud-2d');
 
-    // Cambiamos UI a estado "Escaneando"
     hudTitulo.innerText = "PROCESANDO SENSORES...";
     hudTitulo.style.color = "var(--color-cyan-ar)";
     hud2d.style.borderColor = "var(--color-cyan-ar)";
     hudEscaneando.style.display = "block";
 
-    // Iniciamos el cronómetro de 2.5 segundos
     temporizadorEscaneo = setTimeout(() => {
-        // Al terminar el tiempo:
         escaneoCompletado = true;
         hudEscaneando.style.display = "none";
         
-        // Mostramos los resultados y guardamos en historial
         mostrarResultadosEnPantalla(datosActuales);
         registrarEnHistorial(datosActuales);
     }, 2500);
 }
 
 function pausarEscaneoSimulado() {
-    // Si pierde la madera de vista antes de los 2.5 seg, abortamos
     if (!escaneoCompletado) {
-        clearTimeout(temporizadorEscaneo); // Detenemos el cronómetro
-        reiniciarInterfazHUD();            // Volvemos a estado de espera
+        clearTimeout(temporizadorEscaneo); 
+        reiniciarInterfazHUD();            
     }
 }
 
@@ -82,15 +67,14 @@ function reiniciarInterfazHUD() {
     document.getElementById('zona-defecto').setAttribute('visible', false);
 }
 
-// --- 3. MOSTRAR RESULTADOS (Después de los 2.5 segundos) ---
+// --- 3. MOSTRAR RESULTADOS ---
 function mostrarResultadosEnPantalla(datos) {
     const hudDatos = document.getElementById('hud-datos');
     const hudTitulo = document.getElementById('hud-titulo');
     const hud2d = document.getElementById('hud-2d');
 
-    // Mostramos los textos
     hudDatos.style.display = "block";
-    document.getElementById('btn-generar-qr').style.display = "block"; // Habilitamos el botón QR
+    document.getElementById('btn-generar-qr').style.display = "block"; 
     hudTitulo.innerText = "RESULTADO DE ANÁLISIS";
 
     document.getElementById('hud-especie').innerText = `Especie: ${datos.especie}`;
@@ -100,7 +84,6 @@ function mostrarResultadosEnPantalla(datos) {
     const textoCalidad = document.getElementById('hud-calidad');
     textoCalidad.innerText = `CALIDAD: ${datos.calidad}`;
     
-    // Colores de los resultados en el HUD oscuro
     if(datos.calidad === "PREMIUM"){
         textoCalidad.style.color = '#00ff00'; 
         hud2d.style.borderColor = '#00ff00';
@@ -115,7 +98,6 @@ function mostrarResultadosEnPantalla(datos) {
         hudTitulo.style.color = '#ff0000';
     }
 
-    // Activamos el anillo 3D sobre la madera
     const zonaDefecto = document.getElementById('zona-defecto');
     const anilloDefecto = document.getElementById('anillo-defecto');
     const textoZona = document.getElementById('texto-zona');
@@ -153,9 +135,10 @@ function actualizarTablaHistorial() {
     }
     const historialInvertido = [...historialEscaneos].reverse();
     historialInvertido.forEach(item => {
+        // AQUÍ CORREGIMOS EL COLOR AMARILLO ILEGIBLE DEL HISTORIAL
         let colorLegible = "#ef4444"; 
         if(item.calidad === "PREMIUM") colorLegible = "#1b6e49"; 
-        if(item.calidad === "MEDIA") colorLegible = "#d97706";   
+        if(item.calidad === "MEDIA") colorLegible = "#d97706"; // Naranja oscuro para leer en fondo crema
 
         tbody.innerHTML += `<tr><td>${item.hora}</td><td>${item.especie}</td><td style="color: ${colorLegible}; font-weight: bold;">${item.calidad}</td></tr>`;
     });
@@ -180,11 +163,27 @@ function generarQR() {
 
 // --- CONTROLADORES UI/UX (Botones) ---
 document.addEventListener('DOMContentLoaded', () => {
+    // Pantallas principales
+    const pantallaBienvenida = document.getElementById('pantalla-bienvenida');
     const pantallaInicio = document.getElementById('pantalla-inicio');
     const interfazAR = document.getElementById('interfaz-ar');
+    
+    // Menú y Modales
     const menuLateral = document.getElementById('menu-lateral');
     const overlayMenu = document.getElementById('overlay-menu');
     const modales = document.querySelectorAll('.modal');
+
+    // 1. TRANSICIÓN DE BIENVENIDA A CONFIGURACIÓN
+    document.getElementById('btn-ingresar').addEventListener('click', () => {
+        pantallaBienvenida.style.opacity = '0';
+        setTimeout(() => {
+            pantallaBienvenida.style.display = 'none';
+            pantallaInicio.style.display = 'flex'; // Mostramos el panel de seleccionar madera
+            // Pequeño efecto de aparición suave
+            pantallaInicio.style.opacity = '0';
+            setTimeout(() => { pantallaInicio.style.opacity = '1'; }, 50);
+        }, 500);
+    });
 
     function abrirMenu() { menuLateral.classList.add('abierto'); overlayMenu.classList.add('abierto'); }
     function cerrarMenu() { menuLateral.classList.remove('abierto'); overlayMenu.classList.remove('abierto'); }
@@ -193,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btn-hamburger').addEventListener('click', abrirMenu);
     overlayMenu.addEventListener('click', cerrarMenu);
 
+    // Volver a elegir madera (desde el menú hamburguesa)
     document.getElementById('opt-nueva-muestra').addEventListener('click', () => {
         cerrarMenu();
         modales.forEach(m => m.style.display = 'none'); 
@@ -206,9 +206,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('opt-reporte').addEventListener('click', () => mostrarModal('modal-reporte'));
     document.getElementById('opt-historial').addEventListener('click', () => mostrarModal('modal-historial'));
     
+    // 2. INICIAR LA CÁMARA RA
     document.getElementById('btn-iniciar').addEventListener('click', () => {
         const seleccion = document.getElementById('selector-madera').value;
-        prepararEscaneo(seleccion); // Carga datos, pero NO los muestra aún
+        prepararEscaneo(seleccion); 
         
         pantallaInicio.style.opacity = '0';
         setTimeout(() => {

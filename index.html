@@ -60,37 +60,46 @@
         #overlay-menu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 9999; pointer-events: auto; }
         #overlay-menu.abierto { display: block; }
 
+        /* --- NUEVA PANTALLA DE BIENVENIDA --- */
+        #pantalla-bienvenida {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--color-crema-fondo); z-index: 10001; /* Más arriba que todo */
+            display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease;
+        }
+
+        /* --- PANTALLA DE INICIO (Configuración) --- */
         #pantalla-inicio {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--color-crema-fondo); z-index: 9999;
-            display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease;
+            display: none; /* Oculta al principio */ justify-content: center; align-items: center; transition: opacity 0.5s ease;
         }
+
         .card-configuracion {
-            background-color: var(--color-blanco-puro); padding: 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(60, 41, 24, 0.15); text-align: center;
+            background-color: var(--color-blanco-puro); padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 30px rgba(60, 41, 24, 0.15); text-align: center;
             color: var(--color-marron-texto); width: 85%; max-width: 400px; border-top: 5px solid var(--color-verde-logo);
         }
-        .card-configuracion h1 { margin: 10px 0 5px 0; font-size: 24px; color: var(--color-verde-logo); }
-        .card-configuracion p { margin: 0 0 25px 0; font-size: 14px; color: #64748b; }
-        #logo-inicio { height: 90px; border-radius: 15px; }
+        .card-configuracion h1 { margin: 15px 0 5px 0; font-size: 26px; color: var(--color-verde-logo); }
+        .card-configuracion p { margin: 0 0 25px 0; font-size: 15px; color: #64748b; }
+        .logo-grande { height: 110px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
 
         .grupo-input { text-align: left; margin-bottom: 25px; }
         .grupo-input label { font-size: 13px; color: var(--color-marron-texto); font-weight: bold; display: block; margin-bottom: 8px; }
         select { width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e1; background-color: var(--color-crema-fondo); color: var(--color-marron-texto); font-size: 16px; outline: none; }
 
         .btn-primario {
-            width: 100%; padding: 14px; border-radius: 6px; border: none; background-color: var(--color-verde-logo); color: var(--color-blanco-puro);
+            width: 100%; padding: 16px; border-radius: 6px; border: none; background-color: var(--color-verde-logo); color: var(--color-blanco-puro);
             font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-bottom: 10px; pointer-events: auto;
+            text-transform: uppercase; letter-spacing: 1px;
         }
         .btn-primario:hover { background-color: #124d33; }
 
         #interfaz-ar { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; pointer-events: none; display: none; }
         .btn-qr { bottom: 30px; right: 20px; position: absolute; pointer-events: auto; width: auto; font-size: 14px; padding: 12px 20px; background-color: var(--color-cyan-ar); color: var(--color-marron-texto); font-weight: bold; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border-radius: 6px;}
 
-        /* --- HUD 2D ACTUALIZADO --- */
         #hud-2d {
             position: absolute; bottom: 85px; left: 20px;
             background-color: rgba(60, 41, 24, 0.9);
-            border-top: 4px solid #94a3b8; /* Gris por defecto hasta que escanee */
+            border-top: 4px solid #94a3b8; 
             padding: 15px; border-radius: 8px; width: 230px;
             color: var(--color-crema-fondo); pointer-events: none;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: border-color 0.3s;
@@ -130,14 +139,23 @@
         <div id="app-title">LignoQuality RA</div>
     </div>
 
+    <div id="pantalla-bienvenida">
+        <div class="card-configuracion">
+            <img src="logo.jpg" alt="Logo LignoQuality" class="logo-grande">
+            <h1>LignoQuality RA</h1>
+            <p>Plataforma Inteligente de Análisis Estructural Maderero</p>
+            <button id="btn-ingresar" class="btn-primario">INGRESAR AL SISTEMA</button>
+        </div>
+    </div>
+
     <div id="pantalla-inicio">
         <div class="card-configuracion">
-            <img src="logo.jpg" alt="Logo" id="logo-inicio">
-            <h1>LignoQuality RA</h1>
-            <p>Plataforma de Inspección Digital</p>
-
+            <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <img src="logo.jpg" alt="Logo Pequeño" style="height: 50px; border-radius: 8px;">
+            </div>
+            
             <div class="grupo-input">
-                <label>NUEVO ANÁLISIS DE MUESTRA:</label>
+                <label>SELECCIONE LOTE A ANALIZAR:</label>
                 <select id="selector-madera">
                     <option value="algarrobo_premium">Algarrobo - Lote A (Premium)</option>
                     <option value="pino_medio">Pino - Lote B (Calidad Media)</option>
@@ -145,7 +163,7 @@
                 </select>
             </div>
 
-            <button id="btn-iniciar" class="btn-primario">INICIAR ESCANEO RA</button>
+            <button id="btn-iniciar" class="btn-primario">ENCENDER ESCÁNER RA</button>
         </div>
     </div>
 
@@ -155,10 +173,10 @@
             <p id="menu-title">LignoQuality RA Platform</p>
         </div>
         <div id="menu-acciones">
-            <a class="opcion-menu" id="opt-nueva-muestra" style="color: var(--color-verde-logo); font-weight: bold;"><i class="fas fa-plus-circle"></i> Escanear Nueva Madera</a>
+            <a class="opcion-menu" id="opt-nueva-muestra" style="color: var(--color-verde-logo); font-weight: bold;"><i class="fas fa-plus-circle"></i> Escanear Nuevo Lote</a>
             <a class="opcion-menu activa" id="opt-analisis"><i class="fas fa-camera"></i> Análisis Actual</a>
             <a class="opcion-menu" id="opt-reporte"><i class="fas fa-file-contract"></i> Generar Reporte</a>
-            <a class="opcion-menu" id="opt-historial"><i class="fas fa-history"></i> Historial de Lotes</a>
+            <a class="opcion-menu" id="opt-historial"><i class="fas fa-history"></i> Historial de Turno</a>
             <a class="opcion-menu" id="opt-lotes"><i class="fas fa-boxes-packing"></i> Gestión de Lotes</a>
             <a class="opcion-menu" id="opt-settings"><i class="fas fa-cog"></i> Configuración</a>
         </div>
@@ -185,7 +203,7 @@
             <div id="reporte-contenedor">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 15px;">
                     <img src="logo.jpg" style="height: 40px; border-radius: 4px;" alt="Logo">
-                    <span style="font-size: 10px; color: #64748b; text-align: right;"><b>REPORTE DIGITAL</b><br>Lote Activo</span>
+                    <span style="font-size: 10px; color: #64748b; text-align: right;"><b>REPORTE DIGITAL</b><br>Turno Activo</span>
                 </div>
                 <h2>Análisis Estadístico de Lote</h2>
                 <table>
