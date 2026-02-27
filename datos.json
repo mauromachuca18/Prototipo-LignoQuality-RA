@@ -1,0 +1,30 @@
+{
+  "algarrobo_premium": {
+    "especie": "Algarrobo",
+    "humedad": "12%",
+    "defectos": "Ninguno",
+    "calidad": "PREMIUM",
+    "colorCubo": "#00ff00",
+    "mostrarDefecto": false
+  },
+  "pino_medio": {
+    "especie": "Pino",
+    "humedad": "Alta en el centro",
+    "defectos": "Humedad concentrada",
+    "calidad": "MEDIA",
+    "colorCubo": "#ffff00",
+    "mostrarDefecto": true,
+    "tipoDefecto": "humedad",
+    "posicionDefecto": "1 0.1 0" 
+  },
+  "lapacho_bajo": {
+    "especie": "Lapacho",
+    "humedad": "28%",
+    "defectos": "Grieta profunda",
+    "calidad": "BAJA",
+    "colorCubo": "#ff0000",
+    "mostrarDefecto": true,
+    "tipoDefecto": "grieta",
+    "posicionDefecto": "-0.8 0.1 1.2"
+  }
+}
