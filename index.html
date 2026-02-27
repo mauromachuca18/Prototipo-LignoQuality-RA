@@ -9,65 +9,65 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* --- PALETA DE COLORES ADAPTADA DEL LOGO --- */
+        /* --- NUEVA PALETA DE COLORES (Basada en tu logo) --- */
         :root {
-            --color-bg-panel: #fdfdf2;   /* Crema del logo */
-            --color-titulo-forest: #1b6e49; /* Verde de sensores */
-            --color-tech-cyan: #00eaf1;    /* Cian del cubo RA */
-            --color-texto-main: #3c2918;   /* Marrón oscuro del texto */
-            --color-negro-fondo: #0f172a;  /* Azul/negro industrial */
-            --color-error-red: #ef4444;    /* Rojo tradicional para alertas */
-            --color-warning-yellow: #f59e0b; /* Amarillo tradicional */
+            --color-crema-fondo: #fdfdf2;   /* Fondo claro del logo */
+            --color-verde-logo: #1b6e49;    /* Verde oscuro de los íconos */
+            --color-marron-texto: #3c2918;  /* Marrón oscuro de la palabra TechWood */
+            --color-blanco-puro: #ffffff;
+            --color-cyan-ar: #00eaf1;       /* Celeste del cubo RA */
+            --color-rojo-alerta: #ef4444;   
         }
 
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--color-texto-main); }
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--color-marron-texto); background-color: var(--color-crema-fondo); }
 
-        /* --- HEADER Y MENÚ DE HAMBURGUESA --- */
+        /* --- HEADER --- */
         #header {
             position: absolute; top: 0; left: 0; width: 100%; height: 60px;
-            background-color: rgba(17, 17, 17, 0.9); z-index: 999;
+            background-color: var(--color-marron-texto); z-index: 999;
             display: flex; align-items: center; padding: 0 20px; box-sizing: border-box;
-            border-bottom: 2px solid var(--color-tech-cyan); color: white;
+            border-bottom: 3px solid var(--color-verde-logo); color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-        #logo-header { height: 35px; margin-right: 15px; }
-        #app-title { font-size: 20px; font-weight: bold; color: white; }
+        #logo-header { height: 35px; margin-right: 15px; border-radius: 6px; } /* Border radius por si es JPEG */
+        #app-title { font-size: 20px; font-weight: bold; color: var(--color-crema-fondo); }
         
         #btn-hamburger {
-            font-size: 28px; color: var(--color-tech-cyan); cursor: pointer;
+            font-size: 28px; color: var(--color-crema-fondo); cursor: pointer;
             margin-right: 20px; pointer-events: auto; background: none; border: none; padding: 0;
         }
 
         /* --- MENÚ LATERAL DESPLEGABLE --- */
         #menu-lateral {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
-            background-color: var(--color-negro-fondo); z-index: 10000;
+            background-color: var(--color-crema-fondo); z-index: 10000;
             transition: left 0.4s ease;
             box-shadow: 10px 0 15px rgba(0,0,0,0.5);
             display: flex; flex-direction: column;
-            border-right: 2px solid var(--color-titulo-forest);
-            pointer-events: auto; /* IMPORTANTE: Asegura que el menú sea interactivo */
+            border-right: 3px solid var(--color-verde-logo);
+            pointer-events: auto;
         }
         #menu-lateral.abierto { left: 0; }
 
         #menu-header {
-            padding: 30px 20px; border-bottom: 1px solid #334155;
-            text-align: center; color: white;
+            padding: 30px 20px; border-bottom: 1px solid #e2e8f0;
+            text-align: center; color: var(--color-marron-texto);
         }
-        #logo-menu { height: 70px; margin-bottom: 15px; }
-        #menu-title { font-size: 14px; color: var(--color-tech-cyan); margin: 0;}
+        #logo-menu { height: 70px; margin-bottom: 15px; border-radius: 10px; }
+        #menu-title { font-size: 15px; color: var(--color-verde-logo); margin: 0; font-weight: bold;}
 
         #menu-acciones { flex-grow: 1; padding: 20px 0; }
         
         .opcion-menu {
             display: flex; align-items: center;
-            padding: 15px 25px; color: white; text-decoration: none;
+            padding: 15px 25px; color: var(--color-marron-texto); text-decoration: none;
             font-size: 16px; border-left: 4px solid transparent;
-            cursor: pointer; transition: background 0.3s;
+            cursor: pointer; transition: background 0.3s; font-weight: 500;
         }
-        .opcion-menu:hover { background-color: rgba(0, 234, 241, 0.05); }
+        .opcion-menu:hover { background-color: rgba(27, 110, 73, 0.08); }
         .opcion-menu.activa {
-            background-color: rgba(0, 234, 241, 0.1);
-            border-left-color: var(--color-tech-cyan); color: var(--color-tech-cyan); font-weight: bold;
+            background-color: rgba(27, 110, 73, 0.15);
+            border-left-color: var(--color-verde-logo); color: var(--color-verde-logo); font-weight: bold;
         }
         .opcion-menu i { margin-right: 15px; font-size: 18px; width: 20px; text-align: center; }
 
@@ -77,57 +77,57 @@
         }
         #overlay-menu.abierto { display: block; }
 
-        /* --- PANTALLA DE INICIO ACTUALIZADA --- */
+        /* --- PANTALLA DE INICIO (Ahora en Crema) --- */
         #pantalla-inicio {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--color-negro-fondo); z-index: 9999;
+            background-color: var(--color-crema-fondo); z-index: 9999;
             display: flex; justify-content: center; align-items: center;
             transition: opacity 0.5s ease;
         }
         .card-configuracion {
-            background-color: var(--color-bg-panel); padding: 30px; border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); text-align: center;
-            color: var(--color-texto-main); width: 85%; max-width: 400px;
-            border-top: 4px solid var(--color-tech-cyan);
+            background-color: var(--color-blanco-puro); padding: 30px; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(60, 41, 24, 0.15); text-align: center;
+            color: var(--color-marron-texto); width: 85%; max-width: 400px;
+            border-top: 5px solid var(--color-verde-logo);
         }
-        .card-configuracion h1 { margin: 10px 0 5px 0; font-size: 24px; color: var(--color-titulo-forest); }
+        .card-configuracion h1 { margin: 10px 0 5px 0; font-size: 24px; color: var(--color-verde-logo); }
         .card-configuracion p { margin: 0 0 25px 0; font-size: 14px; color: #64748b; }
-        #logo-inicio { height: 90px; }
+        #logo-inicio { height: 90px; border-radius: 15px; }
 
         .grupo-input { text-align: left; margin-bottom: 25px; }
-        .grupo-input label { font-size: 13px; color: #475569; font-weight: bold; display: block; margin-bottom: 8px; }
+        .grupo-input label { font-size: 13px; color: var(--color-marron-texto); font-weight: bold; display: block; margin-bottom: 8px; }
         select {
             width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e1;
-            background-color: white; color: var(--color-texto-main); font-size: 16px; outline: none;
+            background-color: var(--color-crema-fondo); color: var(--color-marron-texto); font-size: 16px; outline: none;
         }
 
-        /* --- BOTONES CON NUEVOS COLORES --- */
+        /* --- BOTONES --- */
         .btn-primario {
             width: 100%; padding: 14px; border-radius: 6px; border: none;
-            background-color: var(--color-tech-cyan); color: var(--color-negro-fondo);
+            background-color: var(--color-verde-logo); color: var(--color-blanco-puro);
             font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s;
             margin-bottom: 10px; pointer-events: auto;
         }
-        .btn-primario:hover { background-color: #00d5db; }
+        .btn-primario:hover { background-color: #124d33; }
 
         /* --- INTERFAZ AR (Sobre la cámara) --- */
         #interfaz-ar {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1000; pointer-events: none; display: none;
         }
-        .btn-qr { bottom: 30px; right: 20px; position: absolute; pointer-events: auto; width: auto; font-size: 14px; padding: 12px 20px; }
+        .btn-qr { bottom: 30px; right: 20px; position: absolute; pointer-events: auto; width: auto; font-size: 14px; padding: 12px 20px; background-color: var(--color-cyan-ar); color: var(--color-marron-texto); font-weight: bold; border: none; box-shadow: 0 4px 10px rgba(0,0,0,0.5); border-radius: 6px;}
 
-        /* --- NUEVO HUD 2D FIJO CON COLORES DEL LOGO --- */
+        /* --- HUD 2D FIJO --- */
         #hud-2d {
             position: absolute; bottom: 85px; left: 20px;
-            background-color: var(--color-bg-panel);
-            border-top: 4px solid var(--color-titulo-forest); /* Inicialmente forest green */
+            background-color: rgba(60, 41, 24, 0.9); /* Marrón oscuro transparente */
+            border-top: 4px solid var(--color-verde-logo); 
             padding: 15px; border-radius: 8px; width: 230px;
-            color: var(--color-texto-main); pointer-events: none;
+            color: var(--color-crema-fondo); pointer-events: none;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             transition: border-color 0.3s;
         }
-        #hud-2d h4 { margin: 0 0 10px 0; color: var(--color-titulo-forest); font-size: 12px; text-align: center; }
+        #hud-2d h4 { margin: 0 0 10px 0; color: var(--color-cyan-ar); font-size: 12px; text-align: center; }
         .hud-linea { margin: 5px 0; font-size: 13px; }
         #hud-calidad { display: block; text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px; }
 
@@ -138,30 +138,29 @@
             justify-content: center; align-items: center; pointer-events: auto;
         }
         .modal-contenido {
-            background-color: var(--color-bg-panel); padding: 25px; border-radius: 10px; width: 85%; max-width: 500px;
-            color: var(--color-texto-main); border-top: 4px solid var(--color-tech-cyan);
-            position: relative; max-height: 85vh; overflow-y: auto;
+            background-color: var(--color-crema-fondo); padding: 25px; border-radius: 10px; width: 85%; max-width: 500px;
+            color: var(--color-marron-texto); border-top: 5px solid var(--color-verde-logo);
+            position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         .btn-cerrar {
-            position: absolute; top: 15px; right: 20px; color: #94a3b8; font-size: 24px;
-            cursor: pointer; background: none; border: none; pointer-events: auto;
+            position: absolute; top: 15px; right: 20px; color: var(--color-rojo-alerta); font-size: 28px;
+            cursor: pointer; background: none; border: none; pointer-events: auto; font-weight: bold;
         }
 
         /* --- ESTILOS REPORTE --- */
-        #reporte-contenedor h2 { color: var(--color-titulo-forest); text-align: center; margin-bottom: 25px; }
+        #reporte-contenedor h2 { color: var(--color-verde-logo); text-align: center; margin-bottom: 25px; }
         #reporte-contenedor table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        #reporte-contenedor th, td { border-bottom: 1px solid #e2e8f0; padding: 10px; text-align: left; }
-        #reporte-contenedor th { color: var(--color-titulo-forest); }
+        #reporte-contenedor th, td { border-bottom: 1px solid #cbd5e1; padding: 10px; text-align: left; }
+        #reporte-contenedor th { color: var(--color-verde-logo); }
         
-        /* Gráfico simulado con barras */
-        .grafico-simulado { display: flex; height: 150px; justify-content: space-around; align-items: flex-end; margin-top: 30px; border-bottom: 2px solid #cbd5e1; }
-        .barra { width: 30px; background-color: var(--color-tech-cyan); border-radius: 4px 4px 0 0; text-align: center; color: var(--color-negro-fondo); font-weight: bold; font-size: 11px; padding-top: 5px; }
-        .etiqueta-barra { color: var(--color-texto-main); font-size: 11px; margin-top: 5px; text-align: center; width: 40px; }
+        .grafico-simulado { display: flex; height: 150px; justify-content: space-around; align-items: flex-end; margin-top: 30px; border-bottom: 2px solid #94a3b8; }
+        .barra { width: 30px; background-color: var(--color-verde-logo); border-radius: 4px 4px 0 0; text-align: center; color: white; font-weight: bold; font-size: 11px; padding-top: 5px; }
+        .etiqueta-barra { color: var(--color-marron-texto); font-size: 11px; margin-top: 5px; text-align: center; width: 40px; font-weight: bold;}
 
         /* HISTORIAL */
-        #tabla-historial { width: 100%; border-collapse: collapse; font-size: 13px; }
-        #tabla-historial th { color: var(--color-titulo-forest); text-align: left; border-bottom: 1px solid #e2e8f0; }
-        #tabla-historial td { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+        #tabla-historial { width: 100%; border-collapse: collapse; font-size: 14px; }
+        #tabla-historial th { color: var(--color-verde-logo); text-align: left; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px;}
+        #tabla-historial td { padding: 12px 0; border-bottom: 1px solid #e2e8f0; }
 
         /* QR */
         .qr-container { text-align: center; }
@@ -173,13 +172,13 @@
 
     <div id="header">
         <button id="btn-hamburger"><i class="fas fa-bars"></i></button>
-        <img src="logo.png" alt="Logo" id="logo-header">
+        <img src="logo.jpg" alt="Logo" id="logo-header">
         <div id="app-title">LignoQuality RA</div>
     </div>
 
     <div id="pantalla-inicio">
         <div class="card-configuracion">
-            <img src="logo.png" alt="Logo" id="logo-inicio">
+            <img src="logo.jpg" alt="Logo" id="logo-inicio">
             <h1>LignoQuality RA</h1>
             <p>Plataforma de Inspección Digital</p>
 
@@ -198,10 +197,12 @@
 
     <div id="menu-lateral">
         <div id="menu-header">
-            <img src="logo.png" alt="Logo" id="logo-menu">
+            <img src="logo.jpg" alt="Logo" id="logo-menu">
             <p id="menu-title">LignoQuality RA Platform</p>
         </div>
         <div id="menu-acciones">
+            <a class="opcion-menu" id="opt-nueva-muestra" style="color: var(--color-verde-logo); font-weight: bold;"><i class="fas fa-plus-circle"></i> Escanear Nueva Madera</a>
+            
             <a class="opcion-menu activa" id="opt-analisis"><i class="fas fa-camera"></i> Análisis Actual</a>
             <a class="opcion-menu" id="opt-reporte"><i class="fas fa-file-contract"></i> Generar Reporte</a>
             <a class="opcion-menu" id="opt-historial"><i class="fas fa-history"></i> Historial de Lotes</a>
@@ -215,7 +216,7 @@
     <div id="modal-historial" class="modal">
         <div class="modal-contenido">
             <button class="btn-cerrar" id="btn-cerrar-historial">&times;</button>
-            <h2 style="margin-top: 0; color: var(--color-titulo-forest); text-align: center;">Historial de Escaneos</h2>
+            <h2 style="margin-top: 0; color: var(--color-verde-logo); text-align: center;">Historial de Escaneos</h2>
             <div id="tabla-contenedor">
                 <table id="tabla-historial">
                     <thead><tr><th>Hora</th><th>Especie</th><th>Calidad</th></tr></thead>
@@ -229,8 +230,8 @@
         <div class="modal-contenido">
             <button class="btn-cerrar" id="btn-cerrar-reporte">&times;</button>
             <div id="reporte-contenedor">
-                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 15px;">
-                    <img src="logo.png" style="height: 40px;" alt="Logo">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 15px;">
+                    <img src="logo.jpg" style="height: 40px; border-radius: 4px;" alt="Logo">
                     <span style="font-size: 10px; color: #64748b; text-align: right;"><b>REPORTE DIGITAL</b><br>Lote Activo</span>
                 </div>
                 <h2>Análisis Estadístico de Lote</h2>
@@ -238,14 +239,14 @@
                 <table>
                     <tr><td>Total Analizado</td><td>35 muestras</td></tr>
                     <tr><td>Promedio Humedad</td><td>18.5 %</td></tr>
-                    <tr><td>Muestras Premium</td><td style="color: var(--color-titulo-forest); font-weight: bold;">65 % (23 unidades)</td></tr>
-                    <tr><td>Muestras Bajas</td><td style="color: var(--color-error-red); font-weight: bold;">10 % (4 unidades)</td></tr>
+                    <tr><td>Muestras Premium</td><td style="color: var(--color-verde-logo); font-weight: bold;">65 % (23 unidades)</td></tr>
+                    <tr><td>Muestras Bajas</td><td style="color: var(--color-rojo-alerta); font-weight: bold;">10 % (4 unidades)</td></tr>
                 </table>
 
                 <div class="grafico-simulado">
-                    <div><div class="barra" style="height: 120px;">23</div><div class="etiqueta-barra">Prem</div></div>
-                    <div><div class="barra" style="height: 60px; background-color: var(--color-warning-yellow);">8</div><div class="etiqueta-barra">Med</div></div>
-                    <div><div class="barra" style="height: 30px; background-color: var(--color-error-red);">4</div><div class="etiqueta-barra">Baja</div></div>
+                    <div><div class="barra" style="height: 120px; background-color: var(--color-verde-logo);">23</div><div class="etiqueta-barra">Prem</div></div>
+                    <div><div class="barra" style="height: 60px; background-color: #d97706;">8</div><div class="etiqueta-barra">Med</div></div>
+                    <div><div class="barra" style="height: 30px; background-color: var(--color-rojo-alerta);">4</div><div class="etiqueta-barra">Baja</div></div>
                 </div>
                 
                 <button class="btn-primario" style="margin-top: 30px;">IMPRIMIR PDF COMPLETO</button>
@@ -256,7 +257,7 @@
     <div id="modal-qr" class="modal">
         <div class="modal-contenido" style="text-align: center;">
             <button class="btn-cerrar" id="btn-cerrar-qr">&times;</button>
-            <h2 style="margin-top: 0; color: var(--color-titulo-forest);">Etiqueta Generada</h2>
+            <h2 style="margin-top: 0; color: var(--color-verde-logo);">Etiqueta Generada</h2>
             <p style="color: #64748b; font-size: 13px;">Lista para enviar a impresora térmica.</p>
             <div class="qr-container">
                 <img id="imagen-qr" src="" alt="Código QR">
@@ -270,7 +271,7 @@
         <button id="btn-generar-qr" class="btn-flotante btn-qr">Generar Código QR</button>
         
         <div id="hud-2d">
-            <h4>LignoQuality RA - ANALISIS</h4>
+            <h4>LIGNOQUALITY RA - ANALISIS</h4>
             <p class="hud-linea" id="hud-especie">Especie: ...</p>
             <p class="hud-linea" id="hud-humedad">Humedad: ...</p>
             <p class="hud-linea" id="hud-defectos">Defectos: ...</p>
@@ -280,7 +281,6 @@
 
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
         <a-marker preset="hiro">
-            
             <a-entity id="zona-defecto" visible="false" position="0 0 0">
                 <a-ring id="anillo-defecto" color="red" radius-inner="0.3" radius-outer="0.4" rotation="-90 0 0" opacity="0.8"
                     animation="property: scale; dir: alternate; dur: 1000; to: 1.2 1.2 1.2; loop: true"></a-ring>
