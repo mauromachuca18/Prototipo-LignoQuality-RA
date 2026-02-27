@@ -9,219 +9,87 @@
 
     <style>
         /* --- ESTILOS GENERALES --- */
-        body {
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 
         /* PANTALLA DE INICIO */
         #pantalla-inicio {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #0f172a;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0f172a; z-index: 9999;
+            display: flex; justify-content: center; align-items: center;
             transition: opacity 0.5s ease;
         }
 
         .card-configuracion {
-            background-color: #1e293b;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            color: white;
-            width: 85%;
-            max-width: 400px;
-            border-top: 4px solid #00D2FF;
+            background-color: #1e293b; padding: 30px; border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); text-align: center;
+            color: white; width: 85%; max-width: 400px; border-top: 4px solid #00D2FF;
         }
-
-        .card-configuracion h1 {
-            margin: 0 0 5px 0;
-            font-size: 24px;
-            color: #00D2FF;
-        }
-
-        .card-configuracion p {
-            margin: 0 0 25px 0;
-            font-size: 14px;
-            color: #94a3b8;
-        }
-
-        .grupo-input {
-            text-align: left;
-            margin-bottom: 25px;
-        }
-
-        .grupo-input label {
-            font-size: 13px;
-            color: #cbd5e1;
-            font-weight: bold;
-            display: block;
-            margin-bottom: 8px;
-        }
-
+        .card-configuracion h1 { margin: 0 0 5px 0; font-size: 24px; color: #00D2FF; }
+        .card-configuracion p { margin: 0 0 25px 0; font-size: 14px; color: #94a3b8; }
+        .grupo-input { text-align: left; margin-bottom: 25px; }
+        .grupo-input label { font-size: 13px; color: #cbd5e1; font-weight: bold; display: block; margin-bottom: 8px; }
+        
         select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #334155;
-            background-color: #0f172a;
-            color: white;
-            font-size: 16px;
-            outline: none;
+            width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #334155;
+            background-color: #0f172a; color: white; font-size: 16px; outline: none;
         }
 
         /* BOTONES */
         .btn-primario {
-            width: 100%;
-            padding: 14px;
-            border-radius: 6px;
-            border: none;
-            background-color: #00D2FF;
-            color: #0f172a;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-bottom: 10px;
+            width: 100%; padding: 14px; border-radius: 6px; border: none;
+            background-color: #00D2FF; color: #0f172a; font-size: 16px; font-weight: bold;
+            cursor: pointer; transition: background 0.3s; margin-bottom: 10px;
         }
-
-        .btn-primario:hover {
-            background-color: #00a8cc;
-        }
-
         .btn-secundario {
-            width: 100%;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #00D2FF;
-            background-color: transparent;
-            color: #00D2FF;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
+            width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #00D2FF;
+            background-color: transparent; color: #00D2FF; font-size: 15px; font-weight: bold;
+            cursor: pointer; transition: background 0.3s;
         }
 
-        .btn-secundario:hover {
-            background-color: rgba(0, 210, 255, 0.1);
-        }
-
-        /* INTERFAZ AR (Cámara) */
+        /* INTERFAZ AR (Sobre la cámara) */
         #interfaz-ar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            pointer-events: none;
-            display: none;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1000; pointer-events: none; display: none;
         }
 
         .btn-flotante {
-            position: absolute;
-            padding: 10px 15px;
-            border-radius: 6px;
-            cursor: pointer;
-            pointer-events: auto;
-            font-weight: bold;
-            border: 1px solid #334155;
+            position: absolute; padding: 10px 15px; border-radius: 6px; cursor: pointer; pointer-events: auto;
+            font-weight: bold; border: 1px solid #334155;
         }
+        .btn-volver { top: 20px; left: 20px; background-color: rgba(15, 23, 42, 0.8); color: white; }
+        .btn-qr { bottom: 20px; right: 20px; background-color: #00D2FF; color: #0f172a; border: none; box-shadow: 0 4px 10px rgba(0, 210, 255, 0.4); }
 
-        .btn-volver {
-            top: 20px;
-            left: 20px;
-            background-color: rgba(15, 23, 42, 0.8);
-            color: white;
+        /* NUEVO: PANEL DE DATOS 2D FIJO EN PANTALLA (HUD) */
+        #hud-2d {
+            position: absolute; bottom: 80px; left: 20px; /* Ubicado abajo a la izquierda */
+            background-color: rgba(17, 17, 17, 0.85);
+            border-top: 4px solid #00ff00; /* Esta línea cambiará de color con JS */
+            padding: 15px; border-radius: 8px; width: 220px;
+            color: white; pointer-events: none; /* Para que no moleste si lo tocas */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
+        #hud-2d h4 { margin: 0 0 10px 0; color: #00D2FF; font-size: 13px; text-align: center; }
+        .hud-linea { margin: 5px 0; font-size: 13px; }
+        #hud-calidad { display: block; text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px; }
 
-        .btn-qr {
-            bottom: 30px;
-            right: 20px;
-            background-color: #00D2FF;
-            color: #0f172a;
-            border: none;
-            font-size: 16px;
-            box-shadow: 0 4px 10px rgba(0, 210, 255, 0.4);
-        }
-
-        /* VENTANAS MODALES (Popups) */
+        /* VENTANAS MODALES */
         .modal {
-            display: none;
-            position: fixed;
-            z-index: 10000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
+            display: none; position: fixed; z-index: 10000; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center; align-items: center; pointer-events: auto;
         }
-
         .modal-contenido {
-            background-color: #1e293b;
-            padding: 25px;
-            border-radius: 10px;
-            width: 85%;
-            max-width: 450px;
-            color: white;
-            border-top: 4px solid #00D2FF;
-            position: relative;
-            max-height: 80vh;
-            overflow-y: auto;
+            background-color: #1e293b; padding: 25px; border-radius: 10px; width: 85%; max-width: 450px;
+            color: white; border-top: 4px solid #00D2FF; position: relative; max-height: 80vh; overflow-y: auto;
         }
-
         .btn-cerrar {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            color: #94a3b8;
-            font-size: 24px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            font-weight: bold;
+            position: absolute; top: 15px; right: 20px; color: #94a3b8; font-size: 24px; cursor: pointer; background: none; border: none;
         }
-
-        /* TABLA DE HISTORIAL */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        th,
-        td {
-            border-bottom: 1px solid #334155;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            color: #00D2FF;
-        }
-
-        /* CONTENEDOR QR */
-        .qr-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .qr-container img {
-            border: 10px solid white;
-            border-radius: 8px;
-            max-width: 200px;
-        }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+        th, td { border-bottom: 1px solid #334155; padding: 10px; text-align: left; }
+        th { color: #00D2FF; }
+        .qr-container { text-align: center; margin-top: 20px; }
+        .qr-container img { border: 10px solid white; border-radius: 8px; max-width: 200px; }
     </style>
 </head>
 
@@ -231,7 +99,6 @@
         <div class="card-configuracion">
             <h1>LignoQuality RA</h1>
             <p>Panel de Operador Industrial</p>
-
             <div class="grupo-input">
                 <label>NUEVO ANÁLISIS DE MUESTRA:</label>
                 <select id="selector-madera">
@@ -240,7 +107,6 @@
                     <option value="lapacho_bajo">Lapacho - Lote C (Simular Baja)</option>
                 </select>
             </div>
-
             <button id="btn-iniciar" class="btn-primario">INICIAR ESCANEO RA</button>
             <button id="btn-abrir-historial" class="btn-secundario">VER HISTORIAL DE TURNO</button>
         </div>
@@ -250,18 +116,10 @@
         <div class="modal-contenido">
             <button class="btn-cerrar" id="btn-cerrar-historial">&times;</button>
             <h2 style="margin-top: 0; color: #00D2FF;">Historial de Escaneos</h2>
-            <p style="color: #94a3b8; font-size: 13px;">Registros del turno actual.</p>
             <div id="tabla-contenedor">
                 <table id="tabla-historial">
-                    <thead>
-                        <tr>
-                            <th>Hora</th>
-                            <th>Especie</th>
-                            <th>Calidad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
+                    <thead><tr><th>Hora</th><th>Especie</th><th>Calidad</th></tr></thead>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -271,46 +129,34 @@
         <div class="modal-contenido" style="text-align: center;">
             <button class="btn-cerrar" id="btn-cerrar-qr">&times;</button>
             <h2 style="margin-top: 0; color: #00D2FF;">Etiqueta Generada</h2>
-            <p style="color: #94a3b8; font-size: 13px;">Lista para enviar a impresora térmica.</p>
             <div class="qr-container">
                 <img id="imagen-qr" src="" alt="Código QR">
                 <h3 id="texto-qr-calidad" style="margin-top: 15px;">CALIDAD: ...</h3>
             </div>
-            <button class="btn-primario" style="margin-top: 20px;" onclick="alert('Enviando a impresora...')">IMPRIMIR
-                ETIQUETA</button>
+            <button class="btn-primario" id="btn-imprimir" style="margin-top: 20px;">IMPRIMIR ETIQUETA</button>
         </div>
     </div>
 
     <div id="interfaz-ar">
         <button id="btn-volver" class="btn-flotante btn-volver">← Menú Principal</button>
         <button id="btn-generar-qr" class="btn-flotante btn-qr">Generar Código QR</button>
+        
+        <div id="hud-2d">
+            <h4>LIGNOQUALITY RA</h4>
+            <p class="hud-linea" id="hud-especie">Especie: ...</p>
+            <p class="hud-linea" id="hud-humedad">Humedad: ...</p>
+            <p class="hud-linea" id="hud-defectos">Defectos: ...</p>
+            <span id="hud-calidad">CALIDAD: ...</span>
+        </div>
     </div>
 
     <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
         <a-marker preset="hiro">
-            <a-entity position="0 0.5 0" scale="0.6 0.6 0.6" rotation="-90 0 0">
-                <a-plane color="#111111" opacity="0.85" width="3.5" height="2.8" position="0 0 0"></a-plane>
-                <a-plane id="linea-color" color="green" width="3.5" height="0.1" position="0 1.35 0.05"></a-plane>
-                <a-text value="LIGNOQUALITY RA - ANALISIS" align="center" position="0 1.1 0.1" color="#00D2FF"
-                    scale="0.8 0.8 0.8"></a-text>
-
-                <a-text id="campo-especie" value="Especie: ..." position="-1.5 0.5 0.1" color="white"
-                    scale="0.8 0.8 0.8"></a-text>
-                <a-text id="campo-humedad" value="Humedad: ..." position="-1.5 0.1 0.1" color="white"
-                    scale="0.8 0.8 0.8"></a-text>
-                <a-text id="campo-defectos" value="Defectos: ..." position="-1.5 -0.3 0.1" color="white"
-                    scale="0.8 0.8 0.8" width="3.5"></a-text>
-
-                <a-text id="campo-calidad" value="CALIDAD: ..." align="center" position="0 -1.1 0.1" color="green"
-                    scale="1.5 1.5 1.5" font="mozillavr"></a-text>
-            </a-entity>
             
             <a-entity id="zona-defecto" visible="false" position="0 0 0">
-                <a-ring id="anillo-defecto" color="red" radius-inner="0.3" radius-outer="0.4" rotation="-90 0 0"
-                    opacity="0.8"
+                <a-ring id="anillo-defecto" color="red" radius-inner="0.3" radius-outer="0.4" rotation="-90 0 0" opacity="0.8"
                     animation="property: scale; dir: alternate; dur: 1000; to: 1.2 1.2 1.2; loop: true"></a-ring>
-                <a-text id="texto-zona" value="GRIETA" color="red" position="0 0.5 0" align="center" scale="0.6 0.6 0.6"
-                    rotation="-90 0 0"></a-text>
+                <a-text id="texto-zona" value="GRIETA" color="red" position="0 0.5 0" align="center" scale="0.6 0.6 0.6" rotation="-90 0 0"></a-text>
             </a-entity>
             
         </a-marker>
@@ -319,5 +165,4 @@
 
     <script src="app.js"></script>
 </body>
-
 </html>
