@@ -2,120 +2,220 @@
 <html>
 
 <head>
-    <title>LignoQuality RA - Prototipo</title>
+    <title>LignoQuality RA - Plataforma de Inspección</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
-        /* --- ESTILOS GENERALES --- */
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        /* --- PALETA DE COLORES ADAPTADA DEL LOGO --- */
+        :root {
+            --color-bg-panel: #fdfdf2;   /* Crema del logo */
+            --color-titulo-forest: #1b6e49; /* Verde de sensores */
+            --color-tech-cyan: #00eaf1;    /* Cian del cubo RA */
+            --color-texto-main: #3c2918;   /* Marrón oscuro del texto */
+            --color-negro-fondo: #0f172a;  /* Azul/negro industrial */
+            --color-error-red: #ef4444;    /* Rojo tradicional para alertas */
+            --color-warning-yellow: #f59e0b; /* Amarillo tradicional */
+        }
 
-        /* PANTALLA DE INICIO */
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--color-texto-main); }
+
+        /* --- HEADER Y MENÚ DE HAMBURGUESA --- */
+        #header {
+            position: absolute; top: 0; left: 0; width: 100%; height: 60px;
+            background-color: rgba(17, 17, 17, 0.9); z-index: 999;
+            display: flex; align-items: center; padding: 0 20px; box-sizing: border-box;
+            border-bottom: 2px solid var(--color-tech-cyan); color: white;
+        }
+        #logo-header { height: 35px; margin-right: 15px; }
+        #app-title { font-size: 20px; font-weight: bold; color: white; }
+        
+        #btn-hamburger {
+            font-size: 28px; color: var(--color-tech-cyan); cursor: pointer;
+            margin-right: 20px; pointer-events: auto; background: none; border: none; padding: 0;
+        }
+
+        /* --- MENÚ LATERAL DESPLEGABLE --- */
+        #menu-lateral {
+            position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
+            background-color: var(--color-negro-fondo); z-index: 10000;
+            transition: left 0.4s ease;
+            box-shadow: 10px 0 15px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column;
+            border-right: 2px solid var(--color-titulo-forest);
+            pointer-events: auto; /* IMPORTANTE: Asegura que el menú sea interactivo */
+        }
+        #menu-lateral.abierto { left: 0; }
+
+        #menu-header {
+            padding: 30px 20px; border-bottom: 1px solid #334155;
+            text-align: center; color: white;
+        }
+        #logo-menu { height: 70px; margin-bottom: 15px; }
+        #menu-title { font-size: 14px; color: var(--color-tech-cyan); margin: 0;}
+
+        #menu-acciones { flex-grow: 1; padding: 20px 0; }
+        
+        .opcion-menu {
+            display: flex; align-items: center;
+            padding: 15px 25px; color: white; text-decoration: none;
+            font-size: 16px; border-left: 4px solid transparent;
+            cursor: pointer; transition: background 0.3s;
+        }
+        .opcion-menu:hover { background-color: rgba(0, 234, 241, 0.05); }
+        .opcion-menu.activa {
+            background-color: rgba(0, 234, 241, 0.1);
+            border-left-color: var(--color-tech-cyan); color: var(--color-tech-cyan); font-weight: bold;
+        }
+        .opcion-menu i { margin-right: 15px; font-size: 18px; width: 20px; text-align: center; }
+
+        #overlay-menu {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7); z-index: 9999; pointer-events: auto;
+        }
+        #overlay-menu.abierto { display: block; }
+
+        /* --- PANTALLA DE INICIO ACTUALIZADA --- */
         #pantalla-inicio {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #0f172a; z-index: 9999;
+            background-color: var(--color-negro-fondo); z-index: 9999;
             display: flex; justify-content: center; align-items: center;
             transition: opacity 0.5s ease;
         }
-
         .card-configuracion {
-            background-color: #1e293b; padding: 30px; border-radius: 12px;
+            background-color: var(--color-bg-panel); padding: 30px; border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); text-align: center;
-            color: white; width: 85%; max-width: 400px; border-top: 4px solid #00D2FF;
+            color: var(--color-texto-main); width: 85%; max-width: 400px;
+            border-top: 4px solid var(--color-tech-cyan);
         }
-        .card-configuracion h1 { margin: 0 0 5px 0; font-size: 24px; color: #00D2FF; }
-        .card-configuracion p { margin: 0 0 25px 0; font-size: 14px; color: #94a3b8; }
+        .card-configuracion h1 { margin: 10px 0 5px 0; font-size: 24px; color: var(--color-titulo-forest); }
+        .card-configuracion p { margin: 0 0 25px 0; font-size: 14px; color: #64748b; }
+        #logo-inicio { height: 90px; }
+
         .grupo-input { text-align: left; margin-bottom: 25px; }
-        .grupo-input label { font-size: 13px; color: #cbd5e1; font-weight: bold; display: block; margin-bottom: 8px; }
-        
+        .grupo-input label { font-size: 13px; color: #475569; font-weight: bold; display: block; margin-bottom: 8px; }
         select {
-            width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #334155;
-            background-color: #0f172a; color: white; font-size: 16px; outline: none;
+            width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #cbd5e1;
+            background-color: white; color: var(--color-texto-main); font-size: 16px; outline: none;
         }
 
-        /* BOTONES */
+        /* --- BOTONES CON NUEVOS COLORES --- */
         .btn-primario {
             width: 100%; padding: 14px; border-radius: 6px; border: none;
-            background-color: #00D2FF; color: #0f172a; font-size: 16px; font-weight: bold;
-            cursor: pointer; transition: background 0.3s; margin-bottom: 10px;
+            background-color: var(--color-tech-cyan); color: var(--color-negro-fondo);
+            font-size: 16px; font-weight: bold; cursor: pointer; transition: background 0.3s;
+            margin-bottom: 10px; pointer-events: auto;
         }
-        .btn-secundario {
-            width: 100%; padding: 12px; border-radius: 6px; border: 1px solid #00D2FF;
-            background-color: transparent; color: #00D2FF; font-size: 15px; font-weight: bold;
-            cursor: pointer; transition: background 0.3s;
-        }
+        .btn-primario:hover { background-color: #00d5db; }
 
-        /* INTERFAZ AR (Sobre la cámara) */
+        /* --- INTERFAZ AR (Sobre la cámara) --- */
         #interfaz-ar {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1000; pointer-events: none; display: none;
         }
+        .btn-qr { bottom: 30px; right: 20px; position: absolute; pointer-events: auto; width: auto; font-size: 14px; padding: 12px 20px; }
 
-        .btn-flotante {
-            position: absolute; padding: 10px 15px; border-radius: 6px; cursor: pointer; pointer-events: auto;
-            font-weight: bold; border: 1px solid #334155;
-        }
-        .btn-volver { top: 20px; left: 20px; background-color: rgba(15, 23, 42, 0.8); color: white; }
-        .btn-qr { bottom: 20px; right: 20px; background-color: #00D2FF; color: #0f172a; border: none; box-shadow: 0 4px 10px rgba(0, 210, 255, 0.4); }
-
-        /* NUEVO: PANEL DE DATOS 2D FIJO EN PANTALLA (HUD) */
+        /* --- NUEVO HUD 2D FIJO CON COLORES DEL LOGO --- */
         #hud-2d {
-            position: absolute; bottom: 80px; left: 20px; /* Ubicado abajo a la izquierda */
-            background-color: rgba(17, 17, 17, 0.85);
-            border-top: 4px solid #00ff00; /* Esta línea cambiará de color con JS */
-            padding: 15px; border-radius: 8px; width: 220px;
-            color: white; pointer-events: none; /* Para que no moleste si lo tocas */
+            position: absolute; bottom: 85px; left: 20px;
+            background-color: var(--color-bg-panel);
+            border-top: 4px solid var(--color-titulo-forest); /* Inicialmente forest green */
+            padding: 15px; border-radius: 8px; width: 230px;
+            color: var(--color-texto-main); pointer-events: none;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: border-color 0.3s;
         }
-        #hud-2d h4 { margin: 0 0 10px 0; color: #00D2FF; font-size: 13px; text-align: center; }
+        #hud-2d h4 { margin: 0 0 10px 0; color: var(--color-titulo-forest); font-size: 12px; text-align: center; }
         .hud-linea { margin: 5px 0; font-size: 13px; }
         #hud-calidad { display: block; text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px; }
 
-        /* VENTANAS MODALES */
+        /* --- VENTANAS MODALES --- */
         .modal {
             display: none; position: fixed; z-index: 10000; left: 0; top: 0;
             width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8);
             justify-content: center; align-items: center; pointer-events: auto;
         }
         .modal-contenido {
-            background-color: #1e293b; padding: 25px; border-radius: 10px; width: 85%; max-width: 450px;
-            color: white; border-top: 4px solid #00D2FF; position: relative; max-height: 80vh; overflow-y: auto;
+            background-color: var(--color-bg-panel); padding: 25px; border-radius: 10px; width: 85%; max-width: 500px;
+            color: var(--color-texto-main); border-top: 4px solid var(--color-tech-cyan);
+            position: relative; max-height: 85vh; overflow-y: auto;
         }
         .btn-cerrar {
-            position: absolute; top: 15px; right: 20px; color: #94a3b8; font-size: 24px; cursor: pointer; background: none; border: none;
+            position: absolute; top: 15px; right: 20px; color: #94a3b8; font-size: 24px;
+            cursor: pointer; background: none; border: none; pointer-events: auto;
         }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
-        th, td { border-bottom: 1px solid #334155; padding: 10px; text-align: left; }
-        th { color: #00D2FF; }
-        .qr-container { text-align: center; margin-top: 20px; }
-        .qr-container img { border: 10px solid white; border-radius: 8px; max-width: 200px; }
+
+        /* --- ESTILOS REPORTE --- */
+        #reporte-contenedor h2 { color: var(--color-titulo-forest); text-align: center; margin-bottom: 25px; }
+        #reporte-contenedor table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        #reporte-contenedor th, td { border-bottom: 1px solid #e2e8f0; padding: 10px; text-align: left; }
+        #reporte-contenedor th { color: var(--color-titulo-forest); }
+        
+        /* Gráfico simulado con barras */
+        .grafico-simulado { display: flex; height: 150px; justify-content: space-around; align-items: flex-end; margin-top: 30px; border-bottom: 2px solid #cbd5e1; }
+        .barra { width: 30px; background-color: var(--color-tech-cyan); border-radius: 4px 4px 0 0; text-align: center; color: var(--color-negro-fondo); font-weight: bold; font-size: 11px; padding-top: 5px; }
+        .etiqueta-barra { color: var(--color-texto-main); font-size: 11px; margin-top: 5px; text-align: center; width: 40px; }
+
+        /* HISTORIAL */
+        #tabla-historial { width: 100%; border-collapse: collapse; font-size: 13px; }
+        #tabla-historial th { color: var(--color-titulo-forest); text-align: left; border-bottom: 1px solid #e2e8f0; }
+        #tabla-historial td { padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+
+        /* QR */
+        .qr-container { text-align: center; }
+        .qr-container img { border: 10px solid white; border-radius: 8px; max-width: 200px; box-shadow: 0 4px 8px rgba(0,0,0,0.3); }
     </style>
 </head>
 
 <body>
 
+    <div id="header">
+        <button id="btn-hamburger"><i class="fas fa-bars"></i></button>
+        <img src="logo.png" alt="Logo" id="logo-header">
+        <div id="app-title">LignoQuality RA</div>
+    </div>
+
     <div id="pantalla-inicio">
         <div class="card-configuracion">
+            <img src="logo.png" alt="Logo" id="logo-inicio">
             <h1>LignoQuality RA</h1>
-            <p>Panel de Operador Industrial</p>
+            <p>Plataforma de Inspección Digital</p>
+
             <div class="grupo-input">
                 <label>NUEVO ANÁLISIS DE MUESTRA:</label>
                 <select id="selector-madera">
-                    <option value="algarrobo_premium">Algarrobo - Lote A (Simular Premium)</option>
-                    <option value="pino_medio">Pino - Lote B (Simular Media)</option>
-                    <option value="lapacho_bajo">Lapacho - Lote C (Simular Baja)</option>
+                    <option value="algarrobo_premium">Algarrobo - Lote A (Premium)</option>
+                    <option value="pino_medio">Pino - Lote B (Calidad Media)</option>
+                    <option value="lapacho_bajo">Lapacho - Lote C (Calidad Baja)</option>
                 </select>
             </div>
+
             <button id="btn-iniciar" class="btn-primario">INICIAR ESCANEO RA</button>
-            <button id="btn-abrir-historial" class="btn-secundario">VER HISTORIAL DE TURNO</button>
         </div>
     </div>
+
+    <div id="menu-lateral">
+        <div id="menu-header">
+            <img src="logo.png" alt="Logo" id="logo-menu">
+            <p id="menu-title">LignoQuality RA Platform</p>
+        </div>
+        <div id="menu-acciones">
+            <a class="opcion-menu activa" id="opt-analisis"><i class="fas fa-camera"></i> Análisis Actual</a>
+            <a class="opcion-menu" id="opt-reporte"><i class="fas fa-file-contract"></i> Generar Reporte</a>
+            <a class="opcion-menu" id="opt-historial"><i class="fas fa-history"></i> Historial de Lotes</a>
+            <a class="opcion-menu" id="opt-lotes"><i class="fas fa-boxes-packing"></i> Gestión de Lotes</a>
+            <a class="opcion-menu" id="opt-settings"><i class="fas fa-cog"></i> Configuración</a>
+        </div>
+        <div style="padding: 10px 25px; color: #64748b; font-size: 11px;">Operador: M. Machuca - ID: 18</div>
+    </div>
+    <div id="overlay-menu"></div>
 
     <div id="modal-historial" class="modal">
         <div class="modal-contenido">
             <button class="btn-cerrar" id="btn-cerrar-historial">&times;</button>
-            <h2 style="margin-top: 0; color: #00D2FF;">Historial de Escaneos</h2>
+            <h2 style="margin-top: 0; color: var(--color-titulo-forest); text-align: center;">Historial de Escaneos</h2>
             <div id="tabla-contenedor">
                 <table id="tabla-historial">
                     <thead><tr><th>Hora</th><th>Especie</th><th>Calidad</th></tr></thead>
@@ -125,24 +225,52 @@
         </div>
     </div>
 
+    <div id="modal-reporte" class="modal">
+        <div class="modal-contenido">
+            <button class="btn-cerrar" id="btn-cerrar-reporte">&times;</button>
+            <div id="reporte-contenedor">
+                <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 15px;">
+                    <img src="logo.png" style="height: 40px;" alt="Logo">
+                    <span style="font-size: 10px; color: #64748b; text-align: right;"><b>REPORTE DIGITAL</b><br>Lote Activo</span>
+                </div>
+                <h2>Análisis Estadístico de Lote</h2>
+                
+                <table>
+                    <tr><td>Total Analizado</td><td>35 muestras</td></tr>
+                    <tr><td>Promedio Humedad</td><td>18.5 %</td></tr>
+                    <tr><td>Muestras Premium</td><td style="color: var(--color-titulo-forest); font-weight: bold;">65 % (23 unidades)</td></tr>
+                    <tr><td>Muestras Bajas</td><td style="color: var(--color-error-red); font-weight: bold;">10 % (4 unidades)</td></tr>
+                </table>
+
+                <div class="grafico-simulado">
+                    <div><div class="barra" style="height: 120px;">23</div><div class="etiqueta-barra">Prem</div></div>
+                    <div><div class="barra" style="height: 60px; background-color: var(--color-warning-yellow);">8</div><div class="etiqueta-barra">Med</div></div>
+                    <div><div class="barra" style="height: 30px; background-color: var(--color-error-red);">4</div><div class="etiqueta-barra">Baja</div></div>
+                </div>
+                
+                <button class="btn-primario" style="margin-top: 30px;">IMPRIMIR PDF COMPLETO</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-qr" class="modal">
         <div class="modal-contenido" style="text-align: center;">
             <button class="btn-cerrar" id="btn-cerrar-qr">&times;</button>
-            <h2 style="margin-top: 0; color: #00D2FF;">Etiqueta Generada</h2>
+            <h2 style="margin-top: 0; color: var(--color-titulo-forest);">Etiqueta Generada</h2>
+            <p style="color: #64748b; font-size: 13px;">Lista para enviar a impresora térmica.</p>
             <div class="qr-container">
                 <img id="imagen-qr" src="" alt="Código QR">
                 <h3 id="texto-qr-calidad" style="margin-top: 15px;">CALIDAD: ...</h3>
             </div>
-            <button class="btn-primario" id="btn-imprimir" style="margin-top: 20px;">IMPRIMIR ETIQUETA</button>
+            <button class="btn-primario" style="margin-top: 20px;">IMPRIMIR ETIQUETA</button>
         </div>
     </div>
 
     <div id="interfaz-ar">
-        <button id="btn-volver" class="btn-flotante btn-volver">← Menú Principal</button>
         <button id="btn-generar-qr" class="btn-flotante btn-qr">Generar Código QR</button>
         
         <div id="hud-2d">
-            <h4>LIGNOQUALITY RA</h4>
+            <h4>LignoQuality RA - ANALISIS</h4>
             <p class="hud-linea" id="hud-especie">Especie: ...</p>
             <p class="hud-linea" id="hud-humedad">Humedad: ...</p>
             <p class="hud-linea" id="hud-defectos">Defectos: ...</p>
@@ -158,11 +286,11 @@
                     animation="property: scale; dir: alternate; dur: 1000; to: 1.2 1.2 1.2; loop: true"></a-ring>
                 <a-text id="texto-zona" value="GRIETA" color="red" position="0 0.5 0" align="center" scale="0.6 0.6 0.6" rotation="-90 0 0"></a-text>
             </a-entity>
-            
         </a-marker>
         <a-entity camera></a-entity>
     </a-scene>
 
     <script src="app.js"></script>
 </body>
+
 </html>
