@@ -21,9 +21,10 @@
 
         body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: var(--color-marron-texto); background-color: var(--color-crema-fondo); }
 
+        /* --- HEADER (Ahora en la capa 10000 para que siempre se vea) --- */
         #header {
             position: absolute; top: 0; left: 0; width: 100%; height: 60px;
-            background-color: var(--color-marron-texto); z-index: 999;
+            background-color: var(--color-marron-texto); z-index: 10000; 
             display: flex; align-items: center; padding: 0 20px; box-sizing: border-box;
             border-bottom: 3px solid var(--color-verde-logo); color: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -36,9 +37,10 @@
             margin-right: 20px; pointer-events: auto; background: none; border: none; padding: 0;
         }
 
+        /* --- MENÚ LATERAL Y OVERLAY (Capas superiores al Header) --- */
         #menu-lateral {
             position: fixed; top: 0; left: -280px; width: 280px; height: 100%;
-            background-color: var(--color-crema-fondo); z-index: 10000;
+            background-color: var(--color-crema-fondo); z-index: 10004;
             transition: left 0.4s ease; box-shadow: 10px 0 15px rgba(0,0,0,0.5);
             display: flex; flex-direction: column; border-right: 3px solid var(--color-verde-logo); pointer-events: auto;
         }
@@ -57,21 +59,22 @@
         .opcion-menu.activa { background-color: rgba(27, 110, 73, 0.15); border-left-color: var(--color-verde-logo); color: var(--color-verde-logo); font-weight: bold; }
         .opcion-menu i { margin-right: 15px; font-size: 18px; width: 20px; text-align: center; }
 
-        #overlay-menu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 9999; pointer-events: auto; }
+        #overlay-menu { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 10003; pointer-events: auto; }
         #overlay-menu.abierto { display: block; }
 
-        /* --- NUEVA PANTALLA DE BIENVENIDA --- */
+        /* --- PANTALLA DE BIENVENIDA (Capa máxima) --- */
         #pantalla-bienvenida {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--color-crema-fondo); z-index: 10001; /* Más arriba que todo */
+            background-color: var(--color-crema-fondo); z-index: 10005;
             display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease;
         }
 
-        /* --- PANTALLA DE INICIO (Configuración) --- */
+        /* --- PANTALLA DE INICIO (Ahora en capa 9999 para no tapar el Header) --- */
         #pantalla-inicio {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-color: var(--color-crema-fondo); z-index: 9999;
-            display: none; /* Oculta al principio */ justify-content: center; align-items: center; transition: opacity 0.5s ease;
+            display: none; justify-content: center; align-items: center; transition: opacity 0.5s ease;
+            padding-top: 60px; box-sizing: border-box; /* Deja espacio para el Header */
         }
 
         .card-configuracion {
@@ -109,7 +112,7 @@
         .hud-linea { margin: 5px 0; font-size: 13px; }
         #hud-calidad { display: block; text-align: center; font-size: 18px; font-weight: bold; margin-top: 10px; }
 
-        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; pointer-events: auto; }
+        .modal { display: none; position: fixed; z-index: 10010; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); justify-content: center; align-items: center; pointer-events: auto; }
         .modal-contenido { background-color: var(--color-crema-fondo); padding: 25px; border-radius: 10px; width: 85%; max-width: 500px; color: var(--color-marron-texto); border-top: 5px solid var(--color-verde-logo); position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .btn-cerrar { position: absolute; top: 15px; right: 20px; color: var(--color-rojo-alerta); font-size: 28px; cursor: pointer; background: none; border: none; pointer-events: auto; font-weight: bold; }
 
@@ -135,13 +138,13 @@
 
     <div id="header">
         <button id="btn-hamburger"><i class="fas fa-bars"></i></button>
-        <img src="logo.jpg" alt="Logo" id="logo-header">
+        <img src="logo.jpeg" alt="Logo" id="logo-header">
         <div id="app-title">LignoQuality RA</div>
     </div>
 
     <div id="pantalla-bienvenida">
         <div class="card-configuracion">
-            <img src="logo.jpg" alt="Logo LignoQuality" class="logo-grande">
+            <img src="logo.jpeg" alt="Logo LignoQuality" class="logo-grande">
             <h1>LignoQuality RA</h1>
             <p>Plataforma Inteligente de Análisis Estructural Maderero</p>
             <button id="btn-ingresar" class="btn-primario">INGRESAR AL SISTEMA</button>
@@ -150,11 +153,7 @@
 
     <div id="pantalla-inicio">
         <div class="card-configuracion">
-            <div style="display: flex; justify-content: center; margin-bottom: 20px;">
-                <img src="logo.jpg" alt="Logo Pequeño" style="height: 50px; border-radius: 8px;">
-            </div>
-            
-            <div class="grupo-input">
+            <div class="grupo-input" style="margin-top: 10px;">
                 <label>SELECCIONE LOTE A ANALIZAR:</label>
                 <select id="selector-madera">
                     <option value="algarrobo_premium">Algarrobo - Lote A (Premium)</option>
@@ -169,7 +168,7 @@
 
     <div id="menu-lateral">
         <div id="menu-header">
-            <img src="logo.jpg" alt="Logo" id="logo-menu">
+            <img src="logo.jpeg" alt="Logo" id="logo-menu">
             <p id="menu-title">LignoQuality RA Platform</p>
         </div>
         <div id="menu-acciones">
@@ -202,7 +201,7 @@
             <button class="btn-cerrar" id="btn-cerrar-reporte">&times;</button>
             <div id="reporte-contenedor">
                 <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 10px; margin-bottom: 15px;">
-                    <img src="logo.jpg" style="height: 40px; border-radius: 4px;" alt="Logo">
+                    <img src="logo.jpeg" style="height: 40px; border-radius: 4px;" alt="Logo">
                     <span style="font-size: 10px; color: #64748b; text-align: right;"><b>REPORTE DIGITAL</b><br>Turno Activo</span>
                 </div>
                 <h2>Análisis Estadístico de Lote</h2>
